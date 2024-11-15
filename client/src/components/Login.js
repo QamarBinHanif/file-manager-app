@@ -27,36 +27,56 @@ const Login = () => {
   };
 
   const handleSignUp = () => {
-    navigate("/register"); 
+    navigate("/register");
   };
 
   return (
-    <Box sx={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
-      <Typography variant="h5">Login</Typography>
-      <TextField
-        label="Email"
-        fullWidth
-        margin="normal"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <TextField
-        label="Password"
-        type="password"
-        fullWidth
-        margin="normal"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      {errorMessage && <Typography color="error">{errorMessage}</Typography>}
-      <Button variant="contained" fullWidth onClick={handleLogin}>
-        Login
-      </Button>
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
-        <Typography variant="body2">Don't have an account?</Typography>
-        <Button onClick={handleSignUp} sx={{ marginLeft: "10px" }}>
-          Sign Up
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        backgroundColor: "#f4f4f4",
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: "400px",
+          width: "100%",
+          padding: "20px",
+          backgroundColor: "white",
+          borderRadius: "8px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Typography variant="h5" textAlign="center" marginBottom="20px">
+          Login
+        </Typography>
+        <TextField
+          label="Email"
+          fullWidth
+          margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          label="Password"
+          type="password"
+          fullWidth
+          margin="normal"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+        <Button variant="contained" fullWidth onClick={handleLogin}>
+          Login
         </Button>
+        <Box sx={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
+          <Button onClick={handleSignUp} sx={{ marginLeft: "10px" }}>
+            Sign Up
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
