@@ -22,10 +22,13 @@ const Dashboard = () => {
 
   const fetchFiles = async () => {
     try {
+      
       const currentUser = await getLocalStorage("userInfo");
-      const response = await axiosInstance.get(FILE_LIST + currentUser._id);
+      const response = await axiosInstance.get(FILE_LIST + currentUser?._id);
       setFiles(response.data.data);
     } catch (error) {
+      console.log("fetchFiles",error);
+
       if (error.response?.status === 401) {
         navigate("/login");
       }
