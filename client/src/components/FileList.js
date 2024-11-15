@@ -1,28 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, Grid, Typography, Button } from "@mui/material";
-import axiosInstance from "../services/axiosService";
-import { FILE_LIST } from "../constants/api";
-import { useNavigate } from "react-router-dom";
 
-const FileList = () => {
-  const [files, setFiles] = useState([]);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchFiles();
-  }, []);
-  const fetchFiles = async () => {
-    try {
-      const response = await axiosInstance.get(FILE_LIST);
-      setFiles(response.data.data);
-    } catch (error) {
-        if(error.response.status===401){
-            navigate("/login")
-        }
-        
-    }
-  };
-
+const FileList = ({ files }) => {
   return (
     <Box sx={{ padding: "20px" }}>
       <Typography variant="h5">Your Files</Typography>
@@ -40,14 +19,14 @@ const FileList = () => {
               <Button
                 variant="outlined"
                 fullWidth
-                href={file.sharedLink}
+                href={file.path}
                 target="_blank"
               >
                 Share Link
               </Button>
-              <Button variant="outlined" fullWidth>
+              {/* <Button variant="outlined" fullWidth>
                 View Statistics
-              </Button>
+              </Button> */}
             </Box>
           </Grid>
         ))}

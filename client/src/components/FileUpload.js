@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import { Button, TextField, Typography, Box } from "@mui/material";
 import { useDropzone } from "react-dropzone";
-import axios from "axios";
 import { FILE_UPLOAD } from "../constants/api";
 import axiosInstance from "../services/axiosService";
+import { getLocalStorage } from "../utils/localStorage";
 
-const FileUpload = () => {
+const FileUpload = ({ fetchFiles }) => {
   const [file, setFile] = useState(null);
   const [tags, setTags] = useState("");
   const [message, setMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*,video/*", 
-    onDrop: (acceptedFiles) =>{
-        
-        setFile(acceptedFiles[0])},
+    accept: "image/*,video/*",
+    onDrop: (acceptedFiles) => {
+      setFile(acceptedFiles[0]);
+    },
   });
 
   const handleUpload = async () => {
@@ -27,15 +27,16 @@ const FileUpload = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("tags", tags.split(","));
-    formData.append("userId", '6736f2a2f68345ec78047f00');
-
-
+    const currnetUser = await getLocalStorage("userInfo");
+    formData.append("userId", currnetUser?._id);
 
     try {
       await axiosInstance.post(FILE_UPLOAD, formData);
       setMessage("File uploaded successfully!");
       setFile(null);
-      setTags("")
+      fetchFiles();
+
+      setTags("");
     } catch (error) {
       setMessage("Error uploading file.");
     } finally {
@@ -46,7 +47,14 @@ const FileUpload = () => {
   return (
     <Box sx={{ maxWidth: "600px", margin: "auto", padding: "20px" }}>
       <Typography variant="h5">Upload a File</Typography>
-      <div {...getRootProps()} style={{ border: "2px dashed #1976d2", padding: "20px", textAlign: "center" }}>
+      <div
+        {...getRootProps()}
+        style={{
+          border: "2px dashed #1976d2",
+          padding: "20px",
+          textAlign: "center",
+        }}
+      >
         <input {...getInputProps()} />
         <Typography>Drag & drop your file here, or click to select</Typography>
       </div>
@@ -57,10 +65,19 @@ const FileUpload = () => {
         value={tags}
         onChange={(e) => setTags(e.target.value)}
       />
-      <Button variant="contained" fullWidth onClick={handleUpload} disabled={isUploading}>
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={handleUpload}
+        disabled={isUploading}
+      >
         {isUploading ? "Uploading..." : "Upload"}
       </Button>
-      {message && <Typography color={message.includes("Error") ? "error" : "primary"}>{message}</Typography>}
+      {message && (
+        <Typography color={message.includes("Error") ? "error" : "primary"}>
+          {message}
+        </Typography>
+      )}
     </Box>
   );
 };
