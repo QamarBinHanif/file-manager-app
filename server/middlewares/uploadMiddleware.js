@@ -11,7 +11,6 @@ const storage = multer.diskStorage({
   }
 });
 
-// Limit file size (optional), e.g., 10 MB
 const uploadMiddleware = multer({ 
   storage: storage,
   limits: { fileSize: 10000000 } // 10 MB file size limit

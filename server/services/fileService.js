@@ -8,12 +8,7 @@ dotenv.config();
 // Upload file with tags and shareable link
 const uploadFile = async (fileData, userId, tags) => {
   try {
-    //    const allowedMimeTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/avi', 'video/mov'];
-    //    if (!allowedMimeTypes.includes(fileData.mimetype)) {
-    //       throw new Error('Only image or video files are allowed');
-    //    }
 
-    // Create file document with shareable link and tags
     const file = new File({
       name: fileData.originalname,
       path: process.env.APP_URL + "/" + fileData.path,
