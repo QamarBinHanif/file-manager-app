@@ -1,7 +1,24 @@
-import React from "react";
-import { Box, Grid, Typography, Button } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Grid, Typography, Button, Dialog } from "@mui/material";
+import axiosInstance from "../services/axiosService";
+import { FILE_VIEW } from "../constants/api";
+import FileStatus from "./FileStatus";
 
-const FileList = ({ files }) => {
+const FileList = ({ files, fetchFiles }) => {
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const incrementViews = async (fileId) => {
+    try {
+      await axiosInstance.post(FILE_VIEW + fileId);
+      fetchFiles();
+    } catch (error) {
+      console.error("Error incrementing file views:", error);
+    }
+  };
+  const handleCloseStatus = () => {
+    setSelectedFile(null);
+  };
+
   return (
     <Box sx={{ padding: "20px" }}>
       <Typography variant="h5">Your Files</Typography>
@@ -21,16 +38,27 @@ const FileList = ({ files }) => {
                 fullWidth
                 href={file.path}
                 target="_blank"
+                onClick={() => incrementViews(file._id)}
               >
                 Share Link
               </Button>
-              {/* <Button variant="outlined" fullWidth>
+              <Button
+                variant="outlined"
+                onClick={() => setSelectedFile(file)}
+                fullWidth
+              >
                 View Statistics
-              </Button> */}
+              </Button>
             </Box>
           </Grid>
         ))}
       </Grid>
+      {/* Show File Status in Dialog */}
+      <Dialog open={!!selectedFile} onClose={handleCloseStatus}>
+        {selectedFile && (
+          <FileStatus selectedFile={selectedFile} onClose={handleCloseStatus} />
+        )}
+      </Dialog>
     </Box>
   );
 };

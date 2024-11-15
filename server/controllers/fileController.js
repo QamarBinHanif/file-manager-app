@@ -1,4 +1,4 @@
-const { uploadFile, getFileStatistics,  getAllFiles } = require('../services/fileService');
+const { uploadFile, getFileStatistics,  getAllFiles, incrementFileViews } = require('../services/fileService');
 const { sendResponse, sendError } = require('../utils/responseHelper');
 
 // Upload file with tags and validate file type
@@ -33,8 +33,10 @@ exports.getStatistics = async (req, res) => {
 
 // Get file by shareable link
 exports.getFiles = async (req, res) => {
+   const { userId } = req.params;
+
    try {
-      const file = await getAllFiles();
+      const file = await getAllFiles(userId);
 
       if (!file) return sendError(res, 'File not found', 404);
 
@@ -43,3 +45,16 @@ exports.getFiles = async (req, res) => {
       sendError(res, error.message);
    }
 };
+
+exports. incrementViewsController = async (req, res) => {
+   const { id } = req.params;
+ 
+   try {
+     const updatedFile = await incrementFileViews(id);
+     sendResponse(res, updatedFile );
+   } catch (error) {
+     const statusCode = error.message === 'File not found' ? 404 : 500;
+     res.status(statusCode).json({ success: false, message: error.message });
+   }
+ };
+ 

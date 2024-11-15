@@ -5,6 +5,7 @@ import FileUpload from "../components/FileUpload";
 import FileList from "../components/FileList";
 import axiosInstance from "../services/axiosService";
 import { FILE_LIST } from "../constants/api";
+import { getLocalStorage } from "../utils/localStorage";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -19,7 +20,8 @@ const Dashboard = () => {
   }, []);
   const fetchFiles = async () => {
     try {
-      const response = await axiosInstance.get(FILE_LIST);
+      const currnetUser = await getLocalStorage("userInfo");
+      const response = await axiosInstance.get(FILE_LIST + currnetUser._id);
       setFiles(response.data.data);
     } catch (error) {
       if (error.response.status === 401) {
@@ -42,7 +44,7 @@ const Dashboard = () => {
       </Box>
 
       <Box sx={{ marginTop: "40px" }}>
-        <FileList files={files}  />
+        <FileList files={files} fetchFiles={fetchFiles()}/>
       </Box>
     </Box>
   );

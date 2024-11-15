@@ -46,13 +46,14 @@ const FileUpload = ({ fetchFiles }) => {
 
   return (
     <Box sx={{ maxWidth: "600px", margin: "auto", padding: "20px" }}>
-      <Typography variant="h5">Upload a File</Typography>
+      <Typography variant="h5" sx={{marginBottom:2}}>Upload a File</Typography>
       <div
         {...getRootProps()}
         style={{
           border: "2px dashed #1976d2",
           padding: "20px",
           textAlign: "center",
+          marginBottom: 20,
         }}
       >
         <input {...getInputProps()} />
@@ -64,6 +65,7 @@ const FileUpload = ({ fetchFiles }) => {
         fullWidth
         value={tags}
         onChange={(e) => setTags(e.target.value)}
+        sx={{marginBottom:3}}
       />
       <Button
         variant="contained"

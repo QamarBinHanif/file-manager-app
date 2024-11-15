@@ -32,6 +32,18 @@ const uploadFile = async (fileData, userId, tags) => {
     throw new Error(`File upload failed: ${error.message}`);
   }
 };
+const incrementFileViews = async (fileId) => {
+  const file = await File.findByIdAndUpdate(
+    fileId,
+    { $inc: { views: 1 } }, // Increment views by 1
+    { new: true }           // Return the updated document
+  );
+
+  if (!file) {
+    throw new Error('File not found');
+  }
+  return file;
+};
 
 // Get file statistics, incrementing view count
 const getFileStatistics = async (fileId) => {
@@ -45,8 +57,8 @@ const getFileStatistics = async (fileId) => {
 };
 
 // Find file by shared link
-const getAllFiles = async (sharedLink) => {
-  return await File.find();
+const getAllFiles = async (userId) => {
+  return await File.find({userId});
 };
 
-module.exports = { uploadFile, getFileStatistics, getAllFiles };
+module.exports = { uploadFile, getFileStatistics, getAllFiles,incrementFileViews };
