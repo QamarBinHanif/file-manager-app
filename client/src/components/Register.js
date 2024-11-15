@@ -2,37 +2,40 @@ import React, { useState } from "react";
 import { TextField, Button, Typography, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../services/axiosService";
-import { AUTH_LOGIN } from "../constants/api";
+import { AUTH_REGISTER } from "../constants/api"; // Make sure you define your API endpoint for registration.
 import { setLocalStorage } from "../utils/localStorage";
 
-const Login = () => {
+const Register = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const response = await axiosInstance.post(AUTH_LOGIN, {
+      const response = await axiosInstance.post(AUTH_REGISTER, {
+        username,
         email,
         password,
       });
 
-      setLocalStorage("token", response.data.data.token);
-      setLocalStorage("userInfo", response.data.data.user);
-      navigate("/dashboard");
+      navigate("/login"); // Navigate to the dashboard or home page
     } catch (error) {
-      setErrorMessage("Invalid credentials");
+      setErrorMessage("Registration failed. Please try again.");
     }
-  };
-
-  const handleSignUp = () => {
-    navigate("/register"); 
   };
 
   return (
     <Box sx={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
-      <Typography variant="h5">Login</Typography>
+      <Typography variant="h5">Register</Typography>
+      <TextField
+        label="Username"
+        fullWidth
+        margin="normal"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
       <TextField
         label="Email"
         fullWidth
@@ -49,17 +52,11 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       {errorMessage && <Typography color="error">{errorMessage}</Typography>}
-      <Button variant="contained" fullWidth onClick={handleLogin}>
-        Login
+      <Button variant="contained" fullWidth onClick={handleRegister}>
+        Register
       </Button>
-      <Box sx={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
-        <Typography variant="body2">Don't have an account?</Typography>
-        <Button onClick={handleSignUp} sx={{ marginLeft: "10px" }}>
-          Sign Up
-        </Button>
-      </Box>
     </Box>
   );
 };
 
-export default Login;
+export default Register;
