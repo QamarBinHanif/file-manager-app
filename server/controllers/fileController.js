@@ -33,10 +33,9 @@ exports.getStatistics = async (req, res) => {
 
 // Get file by shareable link
 exports.getFiles = async (req, res) => {
-   const { userId } = req.params;
-
+   const { id } = req.params;
    try {
-      const file = await getAllFiles(userId);
+      const file = await getAllFiles(id);
 
       if (!file) return sendError(res, 'File not found', 404);
 

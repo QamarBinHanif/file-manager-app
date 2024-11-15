@@ -58,7 +58,9 @@ const getFileStatistics = async (fileId) => {
 
 // Find file by shared link
 const getAllFiles = async (userId) => {
-  return await File.find({userId});
+  console.log(userId);
+  
+  return await File.find({uploadedBy:userId});
 };
 
 module.exports = { uploadFile, getFileStatistics, getAllFiles,incrementFileViews };
