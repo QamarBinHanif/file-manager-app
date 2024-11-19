@@ -7,10 +7,9 @@ const path = require('path');
 const fs = require('fs');
 
 dotenv.config();
-console.log(process.env.APP_URL);
 
 const app = express();
-app.use(cors());
+app.use(cors({origin:'*'}));
 app.use(express.json());
 
 connectDB();

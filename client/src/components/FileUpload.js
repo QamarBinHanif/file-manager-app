@@ -12,9 +12,24 @@ const FileUpload = ({ fetchFiles }) => {
   const [isUploading, setIsUploading] = useState(false);
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*,video/*",
-    onDrop: (acceptedFiles) => {
-      setFile(acceptedFiles[0]);
+    accept: {
+      "image/*": [],
+      "video/*": [],
+    },
+    onDrop: (acceptedFiles, rejectedFiles) => {
+      if (rejectedFiles.length > 0) {
+        console.error("Rejected files:", rejectedFiles);
+        setMessage("Unsupported file type or size.");
+        return;
+      }
+      if (acceptedFiles.length > 0) {
+        setFile(acceptedFiles[0]);
+        setMessage(""); // Clear any error messages
+      }
+    },
+    onError: (error) => {
+      console.error("Dropzone error:", error);
+      setMessage("An error occurred while selecting the file.");
     },
   });
 
@@ -46,7 +61,9 @@ const FileUpload = ({ fetchFiles }) => {
 
   return (
     <Box sx={{ maxWidth: "600px", margin: "auto", padding: "20px" }}>
-      <Typography variant="h5" sx={{marginBottom:2}}>Upload a File</Typography>
+      <Typography variant="h5" sx={{ marginBottom: 2 }}>
+        Upload a File
+      </Typography>
       <div
         {...getRootProps()}
         style={{
@@ -65,7 +82,8 @@ const FileUpload = ({ fetchFiles }) => {
         fullWidth
         value={tags}
         onChange={(e) => setTags(e.target.value)}
-        sx={{marginBottom:3}}
+        onDrag={(e) => console.log(e.target.value)}
+        sx={{ marginBottom: 3 }}
       />
       <Button
         variant="contained"

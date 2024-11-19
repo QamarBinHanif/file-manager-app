@@ -1,19 +1,21 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Create an Axios instance with default configuration
 const axiosInstance = axios.create({
-  baseURL:process.env.REACT_APP_BASE_URL_API,
-  timeout: 100000, 
-  // headers: {
-  //   'Content-Type': 'application/json',
-  // },
+  baseURL: process.env.REACT_APP_BASE_URL_API,
+  timeout: 100000,
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  },
 });
 // Add Authorization token to headers dynamically using an interceptor
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');  // Assuming 'token' is stored in localStorage
+    const token = localStorage.getItem("token"); // Assuming 'token' is stored in localStorage
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;  // Set Authorization header if token exists
+      config.headers["Authorization"] = `Bearer ${token}`; // Set Authorization header if token exists
     }
     return config;
   },
@@ -24,14 +26,14 @@ axiosInstance.interceptors.request.use(
 
 // Interceptors for handling responses and errors (optional)
 axiosInstance.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     if (error.response) {
-      console.error('Error response:', error.response);
+      console.error("Error response:", error.response);
     } else if (error.request) {
-      console.error('Error request:', error.request);
+      console.error("Error request:", error.request);
     } else {
-      console.error('General Error:', error.message);
+      console.error("General Error:", error.message);
     }
     return Promise.reject(error);
   }
@@ -46,7 +48,7 @@ export const get = async (url, params = {}, config = {}) => {
     });
     return response.data;
   } catch (error) {
-    console.error('GET request error:', error);
+    console.error("GET request error:", error);
     throw error;
   }
 };
@@ -57,7 +59,7 @@ export const post = async (url, data = {}, config = {}) => {
     const response = await axiosInstance.post(url, data, config);
     return response.data;
   } catch (error) {
-    console.error('POST request error:', error);
+    console.error("POST request error:", error);
     throw error;
   }
 };
